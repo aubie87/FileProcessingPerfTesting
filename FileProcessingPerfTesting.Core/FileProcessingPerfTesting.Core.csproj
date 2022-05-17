@@ -6,8 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\FileProcessingPerfTesting.Core\FileProcessingPerfTesting.Core.csproj" />
-  </ItemGroup>
-
 </Project>

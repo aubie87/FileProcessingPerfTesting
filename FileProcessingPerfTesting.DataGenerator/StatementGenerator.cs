@@ -25,7 +25,7 @@ public class StatementGenerator
         _fakerLine = new Faker<Line>()
             .RuleFor(x => x.LineType, x => x.PickRandom(_lineTypeList))
             .RuleFor(x => x.ColumnCount, x => x.Random.Number(1, 4))
-            .RuleFor(x => x.Text, x => $"{x.Lorem.Sentence(1, 4)} {x.Finance.Amount(0, 10000):n} {x.Lorem.Sentence(1, 4)}");
+            .RuleFor(x => x.Text, x => $"{x.Lorem.Sentence(3, 8)} {x.Finance.Amount(0, 10000):n} {x.Lorem.Sentence(3, 9)}");
 
         _fakerPage = new Faker<Page>()
             .RuleFor(x => x.Lines, _fakerLine.Generate(30));
@@ -35,7 +35,7 @@ public class StatementGenerator
             .RuleFor(x => x.TransType, x => x.Finance.TransactionType())
             .RuleFor(x => x.Amount, x => x.Finance.Amount(-50, 500))
             .RuleFor(x => x.Date, x => x.Date.Between(DateTime.UtcNow.AddDays(-40), DateTime.UtcNow.AddDays(-10)))
-            .RuleFor(x => x.Description, x => x.Lorem.Sentence(3, 6));
+            .RuleFor(x => x.Description, x => x.Lorem.Sentence(4, 12));
 
         _fakerStatement = new Faker<Statement>()
             .RuleFor(p => p.Id, x => _index++)

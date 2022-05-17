@@ -1,16 +1,12 @@
-﻿using FileProcessingPerfTesting.XmlParser.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FileProcessingPerfTesting.Core.Models;
+using FileProcessingPerfTesting.XmlParser.Readers;
 using System.Xml;
 
 namespace FileProcessingPerfTesting.XmlParser;
 public class XmlParser : IDisposable
 {
     private bool _disposedValue = false;
-    private XmlReader _reader;
+    private readonly XmlReader _reader;
 
     public Header Header { get; }
 
@@ -23,8 +19,10 @@ public class XmlParser : IDisposable
     static public XmlParser CreateFromFile(FileInfo xmlFile)
     {
         var reader = XmlReader.Create(xmlFile.FullName);
-        var node = reader.MoveToContent();
+        reader.MoveToContent();
+        
         Header header = LoadHeader(reader);
+        header.Filename = xmlFile.Name;
 
         return new XmlParser(reader, header);
     }
@@ -44,6 +42,23 @@ public class XmlParser : IDisposable
             }
         }
         throw new Exception("Invalid XML");
+    }
+
+    public IEnumerable<Statement> Statements()
+    {
+        while (_reader.Read())
+        {
+            if (_reader.NodeType == XmlNodeType.Element && _reader.Name == "Statement")
+            {
+                Statement statement = StatementReader.Load(_reader);
+                yield return statement;
+            }
+            else if (_reader.NodeType == XmlNodeType.Element)
+            {
+                // any other element at this level is an error
+                throw new InvalidOperationException($"Unexpected element {_reader.Name}.");
+            }
+        }
     }
 
     private static Header ReadHeaderElements(XmlReader reader)
@@ -76,7 +91,7 @@ public class XmlParser : IDisposable
                         header.ExpectedStatementCount = reader.ReadElementContentAsInt();
                         break;
                     default:
-                        System.Console.WriteLine($"Uknown <Header> element {reader.Name}");
+                        Console.WriteLine($"Uknown <Header> element {reader.Name}");
                         break;
                 }
             }
