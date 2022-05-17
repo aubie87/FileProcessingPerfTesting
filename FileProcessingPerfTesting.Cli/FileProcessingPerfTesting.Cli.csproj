@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FileProcessingPerfTesting.DataGenerator\FileProcessingPerfTesting.DataGenerator.csproj" />
+    <ProjectReference Include="..\FileProcessingPerfTesting.XmlParser\FileProcessingPerfTesting.XmlParser.csproj" />
   </ItemGroup>
 
 </Project>

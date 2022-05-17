@@ -1,4 +1,5 @@
 ﻿using FileProcessingPerfTesting.DataGenerator;
+using FileProcessingPerfTesting.XmlParser;
 
 // Establish processing folder.
 string processingFolderName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "FileProcessingPerfTesting");
@@ -13,9 +14,14 @@ IEnumerable<FileInfo> filelist = GetExistingProcessingFiles(processingDirectory)
 
 foreach (var file in filelist)
 {
-    Console.WriteLine($"Processing {file.Name}");
+    ProcessFile(file);
 }
 
+void ProcessFile(FileInfo file)
+{
+    using var xmlParser = XmlParser.CreateFromFile(file);
+    Console.WriteLine($"Loaded {xmlParser.Header.InstitutionName}");
+}
 
 IEnumerable<FileInfo> GetNewProcessingFiles(DirectoryInfo processingDirectory, int fileCount, int statementCount)
 {
