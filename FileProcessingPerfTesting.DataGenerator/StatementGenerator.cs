@@ -52,8 +52,6 @@ public class StatementGenerator
     }
 
     /// <summary>
-    /// ToDo: Pass in a starting ID instead of count. Let the caller decide when
-    /// to stop creating more statements.
     /// </summary>
     /// <param name="statementCount"></param>
     /// <returns></returns>

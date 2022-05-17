@@ -21,4 +21,6 @@ public class Header
     public string? DocumentType { get; set; }
     public int ExpectedStatementCount { get; set; }
     public string? Filename { get; set; }
+
+    public DateTime Saved { get; set; }
 }

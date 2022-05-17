@@ -24,7 +24,6 @@ internal class PageReader
             if (reader.NodeType == XmlNodeType.Element
                 && reader.Name == "Line")
             {
-                // Todo: get this working and test it.
                 page.Lines.AddRange(LineReader.Load(reader));
             }
 
