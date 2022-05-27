@@ -15,6 +15,8 @@ var job = JobContext.StartJob(dbFilepath);
 
 var processingDirectory = new DirectoryInfo(processingFolderName);
 
+// ToDo: Convert to service/DI based CLI.
+
 IEnumerable<FileInfo> filelist = GetExistingProcessingFiles(processingDirectory);
 
 //int fileCount = 4;
@@ -37,16 +39,37 @@ void ProcessFile(FileInfo file)
     header.JobId = job.JobId;
     JobContext.SaveHeader(dbFilepath, header);
 
-    var statementList = new List<Statement>();
-    foreach(var statement in xmlParser.Statements())
+    var statementList = xmlParser.Statements().Take(100).ToList();
+    while (statementList.Any())
     {
-        statement.JobId = job.JobId;
-        statement.HeaderId = header.HeaderId;
-        statementList.Add(statement);
-        if (statement.OriginalId % 100 == 0)
-        {
-            Console.WriteLine($"Saving to DB - {statement.Name}");
-        }
+        statementList
+            .ForEach(s => 
+            {
+                s.JobId = job.JobId;
+                s.HeaderId = header.HeaderId;
+            });
+        
+        Console.WriteLine($"Saving to DB - {statementList[0].Name}");
+        JobContext.SaveStatements(dbFilepath, statementList);
+        statementList = xmlParser.Statements().Take(100).ToList();
+    }
+
+    //foreach (var statement in xmlParser.Statements())
+    //{
+    //    statement.JobId = job.JobId;
+    //    statement.HeaderId = header.HeaderId;
+    //    statementList.Add(statement);
+    //    if (statement.OriginalId % 100 == 0)
+    //    {
+    //        Console.WriteLine($"Saving to DB - {statement.Name}");
+    //        JobContext.SaveStatements(dbFilepath, statementList);
+    //        statementList.Clear();
+    //    }
+    //}
+
+    if(statementList.Any())
+    {
+        Console.WriteLine($"Found {statementList.Count} unsaved statements!");
     }
 }
 

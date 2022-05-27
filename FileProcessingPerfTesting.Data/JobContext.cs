@@ -42,6 +42,13 @@ public class JobContext : DbContext
         context.SaveChanges();
     }
 
+    public static int SaveStatements(string dbFilepath, IEnumerable<Statement> statementList)
+    {
+        using var context = Create(dbFilepath);
+        context.AddRange(statementList);
+        return context.SaveChanges();
+    }
+
     private static async Task<JobContext> CreateAsync(string dbFilename)
     {
         string connectionString = $"Data Source={dbFilename}";

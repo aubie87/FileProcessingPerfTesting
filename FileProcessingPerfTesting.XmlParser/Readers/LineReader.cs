@@ -55,6 +55,7 @@ internal class LineReader
             if (reader.NodeType == XmlNodeType.Element
                 && reader.Name == "Text")
             {
+                // ToDo: Parse for a possible decimal value from the line and store in Amount.
                 line.Text = reader.ReadElementContentAsString();
             }
             else if (reader.NodeType == XmlNodeType.EndElement
