@@ -17,11 +17,11 @@ var processingDirectory = new DirectoryInfo(processingFolderName);
 
 // ToDo: Convert to service/DI based CLI.
 
-IEnumerable<FileInfo> filelist = GetExistingProcessingFiles(processingDirectory);
+// IEnumerable<FileInfo> filelist = GetExistingProcessingFiles(processingDirectory);
 
-//int fileCount = 4;
-//int statementCount = 3000;
-//IEnumerable<FileInfo> filelist = GetNewProcessingFiles(processingDirectory, fileCount, statementCount);
+int fileCount = 4;
+int statementCount = 3000;
+IEnumerable<FileInfo> filelist = GetNewProcessingFiles(processingDirectory, fileCount, statementCount);
 
 foreach (var file in filelist)
 {
@@ -84,6 +84,7 @@ IEnumerable<FileInfo> GetNewProcessingFiles(DirectoryInfo processingDirectory, i
     {
         string filename = Path.Combine(processingDirectory.FullName, $"statement{i}.xml");
         StatementGenerator.SaveStatementsToXml(filename, statementCount, i * 100_000);
+        Console.WriteLine($"Saved: {filename}");
     }
 
     return GetExistingProcessingFiles(processingDirectory);
